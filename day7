@@ -1,0 +1,56 @@
+import Cocoa
+
+// Day 7 - Functions
+
+func printTimesTables(number: Int, end: Int = 12) { //parameters - placeholder, default of 12
+    for i in 1...end {
+        print("\(i) * \(number) is \(i * number)")
+    }
+}
+
+printTimesTables(number: 5, end: 100) //arguments - actual
+
+// return single value from functions
+
+// 1. use arrow
+// 2. use return
+
+func rollDie() -> Int {
+    return Int.random(in:1...6)
+}
+
+let result = rollDie()
+print(result)
+
+func compare(string1: String, string2: String) -> Bool {
+    string1.sorted() == string2.sorted() // can remove "return"
+}
+
+print(compare(string1: "yes", string2: "sey"))
+
+// return multiple values
+
+// Tuples
+func getUser() -> (firstName: String, lastName: String) {
+    (firstName: "Taylor", lastName: "Swift")
+}
+
+let user = getUser()
+print("Name: \(user.firstName)")
+
+
+//remove parameter label for clarity
+func isUppercase(_ string: String) -> Bool {
+    string == string.uppercased()
+}
+
+print(isUppercase("HELLO"))
+
+// rename external argument label
+func printTimesTables(for number: Int) { // use internal parameter name inside function
+    for i in 1...12 {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+
+printTimesTables(for: 5)
