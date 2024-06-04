@@ -1,0 +1,61 @@
+// Day 12 – Classes, inheritance, and checkpoint 7
+
+class Animal {
+    let legs: Int
+    
+    init(legs: Int) {
+        self.legs = legs
+    }
+}
+
+class Dog:Animal {
+    func speak() {
+        print("Bark! Bark!")
+    }
+}
+
+class Corgi:Dog {
+    override func speak() {
+        print("Bark! I'm a Corgi!")
+    }
+}
+
+class Poodle:Dog {
+    override func speak() {
+        print("Bark! I'm a Poodle!")
+    }
+}
+
+class Cat:Animal {
+    let isTame: Bool
+    
+    init(isTame: Bool, legs: Int) {
+        self.isTame = isTame
+        super.init(legs: legs)
+    }
+    
+    func speak() {
+        print("Meow.")
+    }
+}
+
+class Persian: Cat {
+    override func speak() {
+        print("Meow. I'm a persian cat.")
+    }
+}
+
+class Lion: Cat {
+    override func speak() {
+        print("Roar! I'm a lion.")
+    }
+}
+let corgi = Corgi(legs: 4)
+corgi.speak()
+
+let cat = Cat(isTame: true, legs: 4)
+cat.speak()
+
+let lion = Lion(isTame: false, legs: 4)
+print(lion.legs)
+lion.speak()

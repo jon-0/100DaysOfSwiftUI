@@ -1,0 +1,187 @@
+// Day 13 – Protocols, extensions, and checkpoint 8
+
+// 1. how to create and use protocols
+
+protocol Vehicle { // new type
+    var name: String { get } // read only
+    var currentPassengers: Int { get set } // read & writeable
+    func estimateTime(for distance: Int) -> Int // properties and methods. no function bodies allowed. 
+    func travel(distance: Int)
+}
+
+struct Car: Vehicle { // conforms to Vehicle protocol
+    let name = "Car"
+    var currentPassengers = 1
+
+    func estimateTime(for distance: Int) -> Int {
+        distance / 50
+    }
+
+    func travel(distance: Int) {
+        print("I'm driving \(distance) km")
+    }
+
+    func openSunroof(){ // new method not in protocol is allowed
+        print("It's a nice day!")
+    }
+}
+
+struct Bicycle: Vehicle {
+    let name = "Bicycle"
+    var currentPassengers = 1
+
+    func estimateTime(for distance: Int) -> Int {
+        distance / 10
+    }
+
+    func travel(distance: Int) {
+        print("I'm driving \(distance) km")
+    }
+
+}
+
+func commute(distance: Int, using vehicle: Vehicle) {
+    if vehicle.estimateTime(for: distance) > 100 {
+        print("That's too slow. I'll try a different vehicle.")
+    } else {
+        vehicle.travel(distance: distance)
+    }
+}
+
+func getTravelEstimates(using vehicles: [Vehicle], distance: Int) {
+    for vehicle in vehicles {
+        let estimate = vehicle.estimateTime(for: distance)
+        print("\(vehicle.name): \(estimate) hours to travel \(distance)km")
+    }
+}
+
+let car = Car()
+commute(distance: 100, using: car)
+
+let bike = Bicycle()
+commute(distance: 50, using: bike)
+
+getTravelEstimates(using: [car, bike], distance: 150)
+
+// 2. How to use opaque return types
+
+func getRandomNumber() -> some Equatable {
+    Int.random(in: 1...6)
+}
+
+func getRandomBool() -> some Equatable {
+    Bool.random()
+}
+
+print(getRandomNumber() == getRandomNumber())
+
+// 3. How to create and use extensions
+
+    // code completion
+    // code organization
+    // internal access
+
+var quote = "   The truth is rarely pure and never simple   "
+
+extension String {
+    func trimmed() -> String {
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    mutating func trim() {
+        self = self.trimmed()
+    }
+    
+    // can add computed properties
+    var lines: [String] {
+        self.components(separatedBy: .newlines)
+    }
+}
+
+let trimmed = quote.trimmed()
+print(quote)
+print(trimmed)
+// extensions make it easier to modify values in place – i.e., to change a value directly, rather than return a new value.
+quote.trim()
+print(quote)
+
+// if we implement a custom initializer inside an extension, then Swift won’t disable the automatic memberwise initializer.
+
+extension Book {
+    init(title: String, pageCount: Int) {
+        self.title = title
+        self.pageCount = pageCount
+        self.readingHours = pageCount / 50
+    }
+}
+
+struct Book {
+    let title: String
+    let pageCount: Int
+    let readingHours: Int
+
+}
+
+// 4. How to create and use protocol extensions
+
+extension Collection {
+    var isNotEmpty: Bool {
+        isEmpty == false
+    }
+}
+
+let guests = ["Mario", "Luigi", "Peach"]
+
+if guests.isNotEmpty {
+    print("Guest count: \(guests.count)")
+}
+
+/*
+By extending the protocol we’re adding functionality 
+that would otherwise need to be done inside individual structs. 
+
+This is really powerful, and leads to a technique Apple calls protocol-oriented programming – 
+we can list some required methods in a protocol, 
+then add default implementations of those inside a protocol extension. 
+
+All conforming types then get to use those default implementations, 
+or provide their own as needed.
+*/
+
+protocol Person {
+    var name: String { get }
+    func sayHello()
+}
+
+// That means all conforming types must add a sayHello() method, 
+// but we can also add a default implementation of that as an extension like this:
+
+extension Person {
+    func sayHello() {
+        print("Hi, I'm \(name)")
+    }
+}
+
+struct Employee: Person {
+    let name: String
+}
+
+let taylor = Employee(name: "Taylor Swift")
+taylor.sayHello()
+
+/*
+Let’s recap what we learned:
+
+Protocols are like contracts for code: we specify the functions and methods that we required, and conforming types must implement them.
+
+Opaque return types let us hide some information in our code. That might mean we want to retain flexibility to change in the future, but also means we don’t need to write out gigantic return types.
+
+Extensions let us add functionality to our own custom types, or to Swift’s built-in types. This might mean adding a method, but we can also add computed properties.
+
+Protocol extensions let us add functionality to many types all at once – we can add properties and methods to a protocol, and all conforming types get access to them.
+
+*/
+
+
+// Checkpoint 8
+
