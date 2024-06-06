@@ -1,0 +1,18 @@
+import Cocoa
+
+/*
+write a function that accepts an optional array of integers, and returns one randomly.
+If the array is missing or empty, return a random number in the range 1 through 100.
+I want you to be able to write this whole thing in one line of code.
+*/
+
+
+func myRandomInteger(in array: [Int]?) -> Int {
+    return array?.randomElement() ?? Int.random(in: 1...100)
+}
+
+var arr1 = [1,2,3,4,5,6,7,8,9,10]
+var arr2: [Int]? = nil
+
+print(myRandomInteger(in: arr1))
+print(myRandomInteger(in: arr2))
